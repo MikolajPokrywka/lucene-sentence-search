@@ -1,0 +1,33 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.apache.lucene', name: 'lucene-core', version: '8.1.1'
+    compile group: 'org.apache.lucene', name: 'lucene-analyzers-common', version: '8.1.1'
+    compile group: 'org.apache.lucene', name: 'lucene-codecs', version: '8.1.1'
+    compile group: 'org.apache.lucene', name: 'lucene-queryparser', version: '8.1.1'
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+}
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.LuceneSentenceSearch'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.0.0'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
