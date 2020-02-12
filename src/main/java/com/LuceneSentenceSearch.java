@@ -25,7 +25,7 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.MMapDirectory;
-import org.apache.lucene.codecs.lucene80.Lucene80Codec;
+import org.apache.lucene.codecs.lucene84.Lucene84Codec;
 
 
 
@@ -42,33 +42,10 @@ public class LuceneSentenceSearch {
 
     private static final Logger LOGGER = Logger.getLogger("Lucene translation memory.");
 
-    private LuceneSentenceSearch(Directory fsDirectory) {
+    private LuceneSentenceSearch(Directory fsDirectory, String language) {
         super();
         this.indexDirectory = fsDirectory;
-        this.analyzer = new StopwordAnalyzerBase() {
-            final List<String> stopWords = Arrays.asList(
-                    "a", "an", "and", "are", "as", "at", "be", "but", "by",
-                    "for", "if", "in", "into", "is", "it",
-                    "no", "not", "of", "on", "or", "such",
-                    "that", "the", "their", "then", "there", "these",
-                    "they", "this", "to", "was", "will", "with"
-            );
-            final CharArraySet stopSet = new CharArraySet(stopWords, true);
-            final CharArraySet ENGLISH_STOP_WORDS_SET = CharArraySet.unmodifiableSet(stopSet);
-
-            @Override
-            protected TokenStreamComponents createComponents(String fieldName) {
-                final Tokenizer source = new StandardTokenizer();
-                TokenStream result = new EnglishPossessiveFilter(source);
-
-                result = new StopFilter(result, ENGLISH_STOP_WORDS_SET);
-
-                result = new PorterStemFilter(result);
-                return new TokenStreamComponents(source, result);
-            }
-
-        };
-
+        this.analyzer = AnalyzerContainer.getAnalyzer(language);
     }
 
     private static Comparator<ScoreDoc> scoreDocComparator = new Comparator<ScoreDoc>() {
@@ -83,7 +60,11 @@ public class LuceneSentenceSearch {
         }
     };
 
-    public static LuceneSentenceSearch createIndex() {
+    public static LuceneSentenceSearch createIndex(){
+        return createIndex("english");
+    }
+
+    public static LuceneSentenceSearch createIndex(String laguage) {
         String indexName = RandomStringUtils.randomAlphabetic(10);
         String indexDir = "index//" + indexName;
 
@@ -92,7 +73,7 @@ public class LuceneSentenceSearch {
 
             Path indexPath = Paths.get(indexDir);
             MMapDirectory fsDirectory = new MMapDirectory(indexPath);
-            indexer = new LuceneSentenceSearch(fsDirectory);
+            indexer = new LuceneSentenceSearch(fsDirectory, laguage);
         } catch (Exception ex) {
             System.out.println("Cannot create index..." + ex.getMessage());
             System.exit(-1);
@@ -165,7 +146,7 @@ public class LuceneSentenceSearch {
 
     public void addSentenceToIndex(String srcSent, String trgSent, String UID) throws IOException {
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
-        indexWriterConfig.setCodec(new Lucene80Codec());
+        indexWriterConfig.setCodec(new Lucene84Codec());
         IndexWriter indexWriter = new IndexWriter(indexDirectory, indexWriterConfig);
         Document sentence = new Document();
         String[] srcParts = srcSent.split(" ");
@@ -184,7 +165,7 @@ public class LuceneSentenceSearch {
 
     public void deleteSentenceFromIndexByUID(String UID) throws IOException {
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
-        indexWriterConfig.setCodec(new Lucene80Codec());
+        indexWriterConfig.setCodec(new Lucene84Codec());
         IndexWriter indexWriter = new IndexWriter(indexDirectory, indexWriterConfig);
         Query UIDQuery = new TermQuery(new Term("UID", UID));
         indexWriter.deleteDocuments(UIDQuery);
