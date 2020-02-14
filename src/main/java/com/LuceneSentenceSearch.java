@@ -61,7 +61,7 @@ public class LuceneSentenceSearch {
     };
 
     public static LuceneSentenceSearch createIndex(){
-        return createIndex("english");
+        return createIndex("en");
     }
 
     public static LuceneSentenceSearch createIndex(String laguage) {
