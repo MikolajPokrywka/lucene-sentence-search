@@ -38,7 +38,7 @@ public class LuceneSentenceSearch {
     private static final String GET = "GET";
     private static final String DELETE = "DELETE";
     private static int CONTEXT_COUNT = 50;
-    private static float BLEU_SIMILARITY_THRESHOLD = 0.05f;
+    private float bleu_similarity_threshold = 0.05f;
 
     private static final Logger LOGGER = Logger.getLogger("Lucene translation memory.");
 
@@ -61,10 +61,18 @@ public class LuceneSentenceSearch {
     };
 
     public static LuceneSentenceSearch createIndex(){
-        return createIndex("en");
+        return createIndex("en", 0.05f);
     }
 
-    public static LuceneSentenceSearch createIndex(String laguage) {
+    public static LuceneSentenceSearch createIndex(float bleu_similarity_threshold){
+        return createIndex("en", bleu_similarity_threshold);
+    }
+
+    public static LuceneSentenceSearch createIndex(String language){
+        return createIndex(language, 0.05f);
+    }
+
+    public static LuceneSentenceSearch createIndex(String laguage, float bleu_similarity_threshold) {
         String indexName = RandomStringUtils.randomAlphabetic(10);
         String indexDir = "index//" + indexName;
 
