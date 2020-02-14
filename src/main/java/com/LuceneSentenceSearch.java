@@ -61,18 +61,10 @@ public class LuceneSentenceSearch {
     };
 
     public static LuceneSentenceSearch createIndex(){
-        return createIndex("en", 0.05f);
+        return createIndex("en");
     }
 
-    public static LuceneSentenceSearch createIndex(float bleu_similarity_threshold){
-        return createIndex("en", bleu_similarity_threshold);
-    }
-
-    public static LuceneSentenceSearch createIndex(String language){
-        return createIndex(language, 0.05f);
-    }
-
-    public static LuceneSentenceSearch createIndex(String laguage, float bleu_similarity_threshold) {
+    public static LuceneSentenceSearch createIndex(String laguage) {
         String indexName = RandomStringUtils.randomAlphabetic(10);
         String indexDir = "index//" + indexName;
 
@@ -182,7 +174,7 @@ public class LuceneSentenceSearch {
     }
 
 
-    private static ArrayList<Document> bleuRescorer(String reference, List<Document> candidates) {
+    private ArrayList<Document> bleuRescorer(String reference, List<Document> candidates) {
         ArrayList<Document> contextSentences = new ArrayList<Document>();
         F1BleuCalculator calculator = new F1BleuCalculator(reference.split(" "));
         PriorityQueue<ScoreDoc> topScoringDocs = new PriorityQueue<ScoreDoc>(CONTEXT_COUNT, scoreDocComparator);
@@ -197,7 +189,7 @@ public class LuceneSentenceSearch {
         while (!topScoringDocs.isEmpty() && k < CONTEXT_COUNT) {
             k += 1;
             ScoreDoc scoredItem = topScoringDocs.poll();
-            if (scoredItem.score >= BLEU_SIMILARITY_THRESHOLD) {
+            if (scoredItem.score >= this.bleu_similarity_threshold) {
                 contextSentences.add(candidates.get(scoredItem.doc));
             }
         }
@@ -250,5 +242,10 @@ public class LuceneSentenceSearch {
         return documents;
 
     }
+
+    public void setBleu_similarity_threshold(float bleu_similarity_threshold){
+        this.bleu_similarity_threshold = bleu_similarity_threshold;
+    }
+
 }
 
