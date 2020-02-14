@@ -12,19 +12,19 @@ import org.apache.lucene.analysis.pl.PolishAnalyzer;
 public class AnalyzerContainer {
     public static Analyzer getAnalyzer(String lang) {
         switch (lang){
-            case "english":
+            case "en":
                 return new EnglishAnalyzer();
-            case "latvian":
+            case "lv":
                 return new LatvianAnalyzer();
-            case "lithuanian":
+            case "lt":
                 return new LithuanianAnalyzer();
-            case "estonian":
+            case "et":
                 return new EstonianAnalyzer();
-            case "russian":
+            case "ru":
                 return new RussianAnalyzer();
-            case "german":
+            case "de":
                 return new GermanAnalyzer();
-            case "polish":
+            case "pl":
                 return new PolishAnalyzer();
             default:
                 throw new RuntimeException("Invalid analyzer option: " + lang);
