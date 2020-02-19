@@ -14,9 +14,6 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.lucene.analysis.*;
-import org.apache.lucene.analysis.en.EnglishPossessiveFilter;
-import org.apache.lucene.analysis.en.PorterStemFilter;
-import org.apache.lucene.analysis.standard.StandardTokenizer;
 import org.apache.lucene.document.*;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.*;
@@ -66,11 +63,13 @@ public class LuceneSentenceSearch {
 
     public static LuceneSentenceSearch createIndex(String laguage) {
         String indexName = RandomStringUtils.randomAlphabetic(10);
-        String indexDir = "index//" + indexName;
+        return createNamedIndex(indexName, laguage);
+    }
 
+    public static LuceneSentenceSearch createNamedIndex(String indexName, String laguage) {
+        String indexDir = "index//" + indexName;
         LuceneSentenceSearch indexer = null;
         try {
-
             Path indexPath = Paths.get(indexDir);
             MMapDirectory fsDirectory = new MMapDirectory(indexPath);
             indexer = new LuceneSentenceSearch(fsDirectory, laguage);
@@ -83,6 +82,7 @@ public class LuceneSentenceSearch {
 
     public static void main(String[] args) {
         LuceneSentenceSearch indexer = createIndex();
+        System.out.println("Ready:");
         Scanner sc = new Scanner(System.in);
         String command;
         String line;
@@ -90,6 +90,7 @@ public class LuceneSentenceSearch {
         Query query;
         int i=0;
         while (sc.hasNextLine()) {
+            System.out.println("Ready for input:");
             line = sc.nextLine();
 
             command = line.split("\t")[0];
@@ -101,6 +102,7 @@ public class LuceneSentenceSearch {
                     try {
                         reference = reference.replaceAll("@@ ", "");
                         List<Document> contextSentences = indexer.queryTM(reference, UID);
+                        indexer.bleuRescorer(reference, contextSentences);
                         for (Document contextSentence : contextSentences) {
                             String srcSent = contextSentence.getField("srcBPE").stringValue();
                             String trgSent = contextSentence.getField("trgBPE").stringValue();
