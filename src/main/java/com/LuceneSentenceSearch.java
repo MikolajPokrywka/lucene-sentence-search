@@ -165,6 +165,37 @@ public class LuceneSentenceSearch {
         indexWriter.close();
     }
 
+    public void addFileToIndex(String srcFile, String trgFile, String UID) throws IOException {
+        IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
+        indexWriterConfig.setCodec(new Lucene84Codec());
+        IndexWriter indexWriter = new IndexWriter(indexDirectory, indexWriterConfig);
+
+        Reader srcFileReader = new InputStreamReader(new FileInputStream(srcFile),"UTF-8");
+        BufferedReader srcFileBufferReader = new BufferedReader(srcFileReader);
+        Reader trgFileReader = new InputStreamReader(new FileInputStream(srcFile),"UTF-8");
+        BufferedReader trgFileBufferReader = new BufferedReader(trgFileReader);
+
+        String srcSent, trgSent;
+        while ((srcSent=srcFileBufferReader.readLine())!=null) {
+            trgSent=trgFileBufferReader.readLine();
+            Document sentence = new Document();
+            String[] srcParts = srcSent.split(" ");
+            String[] trgParts = trgSent.split(" ");
+
+            if (srcParts.length <= MAX_SENTENCE_LENGTH_BPE && trgParts.length <= MAX_SENTENCE_LENGTH_BPE) {
+                sentence.add(new TextField("src", srcSent.replaceAll("@@ ", ""), Field.Store.YES));
+                sentence.add(new StringField("srcBPE", srcSent, Field.Store.YES));
+                sentence.add(new StringField("trgBPE", trgSent, Field.Store.YES));
+                sentence.add(new TextField("UID", UID, Field.Store.YES));
+                sentence.add(new StoredField("timeStamp", Instant.now().getEpochSecond()));
+                indexWriter.addDocument(sentence);
+            }
+        }
+        trgFileBufferReader.close();
+        srcFileBufferReader.close();
+        indexWriter.close();
+    }
+
     public void deleteSentenceFromIndexByUID(String UID) throws IOException {
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
         indexWriterConfig.setCodec(new Lucene84Codec());
