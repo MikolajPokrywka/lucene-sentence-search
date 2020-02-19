@@ -172,7 +172,7 @@ public class LuceneSentenceSearch {
 
         Reader srcFileReader = new InputStreamReader(new FileInputStream(srcFile),"UTF-8");
         BufferedReader srcFileBufferReader = new BufferedReader(srcFileReader);
-        Reader trgFileReader = new InputStreamReader(new FileInputStream(srcFile),"UTF-8");
+        Reader trgFileReader = new InputStreamReader(new FileInputStream(trgFile),"UTF-8");
         BufferedReader trgFileBufferReader = new BufferedReader(trgFileReader);
 
         String srcSent, trgSent;
