@@ -21,6 +21,7 @@ import org.apache.lucene.analysis.ga.IrishAnalyzer;
 import org.apache.lucene.analysis.fi.FinnishAnalyzer;
 import org.apache.lucene.analysis.no.NorwegianAnalyzer;
 import org.apache.lucene.analysis.sv.SwedishAnalyzer;
+import org.apache.lucene.analysis.nl.DutchAnalyzer;
 
 
 public class AnalyzerContainer {
@@ -66,6 +67,8 @@ public class AnalyzerContainer {
                 return new NorwegianAnalyzer();
             case "sv":
                 return new SwedishAnalyzer();
+            case "nl":
+                return new DutchAnalyzer();
             default:
                 throw new RuntimeException("Invalid analyzer option: " + lang);
         }
