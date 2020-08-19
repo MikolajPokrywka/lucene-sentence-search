@@ -211,7 +211,7 @@ public class LuceneSentenceSearch {
         PriorityQueue<ScoreDoc> topScoringDocs = new PriorityQueue<ScoreDoc>(CONTEXT_COUNT, scoreDocComparator);
         for (int i = 0; i < candidates.size(); ++i) {
             Document hypothesisDoc = candidates.get(i);
-            String hypothesis = hypothesisDoc.getField("srcBPE").stringValue();
+            String hypothesis = hypothesisDoc.getField("src").stringValue();
             Float bleuScore = calculator.calc(hypothesis.split(" "));
             ScoreDoc scoredItem = new ScoreDoc(i, bleuScore);
             topScoringDocs.add(scoredItem);
