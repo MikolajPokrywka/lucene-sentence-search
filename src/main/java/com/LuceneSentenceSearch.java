@@ -211,7 +211,7 @@ public class LuceneSentenceSearch {
         PriorityQueue<ScoreDoc> topScoringDocs = new PriorityQueue<ScoreDoc>(CONTEXT_COUNT, scoreDocComparator);
         for (int i = 0; i < candidates.size(); ++i) {
             Document hypothesisDoc = candidates.get(i);
-            String hypothesis = hypothesisDoc.getField("src").stringValue();
+            String hypothesis = hypothesisDoc.getField("srcBPE").stringValue();
             Float bleuScore = calculator.calc(hypothesis.split(" "));
             ScoreDoc scoredItem = new ScoreDoc(i, bleuScore);
             topScoringDocs.add(scoredItem);
@@ -228,9 +228,8 @@ public class LuceneSentenceSearch {
     }
 
     public List<Document> queryTM(String reference, String UID, boolean skipBleuRescorer, int numberOfCandidates) throws ParseException, IOException {
-        Query query;
         String debpe_reference =  reference.replaceAll("@@ ", "");
-        query = createQuery(debpe_reference, UID);
+        Query query = createQuery(debpe_reference, UID);
         List<Document> candidateSentences = searchSentence(query);
         if (skipBleuRescorer)
             return candidateSentences.subList(0, Integer.min(numberOfCandidates, NUMBER_OF_CONTEXT_CANDIDATES));
