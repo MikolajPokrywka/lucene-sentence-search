@@ -1,6 +1,7 @@
 package com;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -26,14 +27,14 @@ import org.apache.lucene.codecs.lucene84.Lucene84Codec;
 
 
 public class LuceneSentenceSearch {
-    private static int MAX_SENTENCE_LENGTH_BPE = 120;
-    private static int NUMBER_OF_CONTEXT_CANDIDATES = 1000;
-    private Directory indexDirectory;
-    private Analyzer analyzer;
+    private static final int MAX_SENTENCE_LENGTH_BPE = 120;
+    private static final int NUMBER_OF_CONTEXT_CANDIDATES = 1000;
+    private final Directory indexDirectory;
+    private final Analyzer analyzer;
     private static final String INSERT = "INSERT";
     private static final String GET = "GET";
     private static final String DELETE = "DELETE";
-    private static int CONTEXT_COUNT = 50;
+    private static final int CONTEXT_COUNT = 50;
     private float bleu_similarity_threshold = 0.05f;
 
     private static final Logger LOGGER = Logger.getLogger("Lucene translation memory.");
@@ -44,7 +45,7 @@ public class LuceneSentenceSearch {
         this.analyzer = AnalyzerContainer.getAnalyzer(language);
     }
 
-    private static Comparator<ScoreDoc> scoreDocComparator = new Comparator<ScoreDoc>() {
+    private static final Comparator<ScoreDoc> scoreDocComparator = new Comparator<ScoreDoc>() {
         @Override
         public int compare(ScoreDoc d1, ScoreDoc d2) {
             if (d1.score > d2.score)
@@ -169,9 +170,9 @@ public class LuceneSentenceSearch {
         indexWriterConfig.setCodec(new Lucene84Codec());
         IndexWriter indexWriter = new IndexWriter(indexDirectory, indexWriterConfig);
 
-        Reader srcFileReader = new InputStreamReader(new FileInputStream(srcFile),"UTF-8");
+        Reader srcFileReader = new InputStreamReader(new FileInputStream(srcFile), StandardCharsets.UTF_8);
         BufferedReader srcFileBufferReader = new BufferedReader(srcFileReader);
-        Reader trgFileReader = new InputStreamReader(new FileInputStream(trgFile),"UTF-8");
+        Reader trgFileReader = new InputStreamReader(new FileInputStream(trgFile), StandardCharsets.UTF_8);
         BufferedReader trgFileBufferReader = new BufferedReader(trgFileReader);
 
         String srcSent, trgSent;

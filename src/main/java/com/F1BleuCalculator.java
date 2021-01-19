@@ -36,7 +36,7 @@ public class F1BleuCalculator {
     }
 
     private static float getF1BleuScore(HashMap<NGram, Counter> sentence, int sentenceLength, HashMap<NGram, Counter> suggestion, int suggestionLength) {
-        int numerators[] = new int[N];
+        int[] numerators = new int[N];
 
         for (Map.Entry<NGram, Counter> entry : sentence.entrySet()) {
             NGram ngram = entry.getKey();
@@ -105,7 +105,7 @@ public class F1BleuCalculator {
                 String a = sentence[i + offset];
                 String b = ngram.sentence[i + ngram.offset];
 
-                if (!(a != null && b != null && a.equals(b)))
+                if (!(a != null && a.equals(b)))
                     return false;
             }
 
