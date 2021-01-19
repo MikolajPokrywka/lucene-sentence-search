@@ -1,4 +1,3 @@
-import com.LuceneSentenceSearch
 import com.fasterxml.jackson.databind.SerializationFeature
 import io.ktor.application.*
 import io.ktor.features.*
@@ -9,12 +8,19 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.withContext
 
 
-fun main() {
-    val requestProcessor = RequestProcessor("index")
+fun main(args: Array<String>) {
+    val requestProcessor = RequestProcessor("TM_index")
 
-    embeddedServer(Netty, 8080) {
+    if (args.count() < 1 || args[0].toIntOrNull() == null ){
+        throw Exception("Port number not provided")
+    }
+
+    val server = embeddedServer(Netty, args[0].toInt()) {
 
         install(StatusPages) {
             exception<Throwable> { e ->
@@ -60,6 +66,8 @@ fun main() {
                 }
             }
         }
+    }
 
-    }.start(wait = true)
+    server.start(wait = false)
+    println("TM Server started")
 }
