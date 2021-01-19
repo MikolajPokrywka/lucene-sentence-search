@@ -25,7 +25,7 @@ class TMSave {
     data class Response(val status: Status, val errorMessage: String?)
 }
 
-class RequestProcessor(private val indexName: String) {
+class RequestProcessor(private val indexName: String, private val blueRescoringThreshold: Float) {
 
     private val indices = mutableMapOf<String, LuceneSentenceSearch>()
 
@@ -55,6 +55,7 @@ class RequestProcessor(private val indexName: String) {
     private fun getIndex(lang: String): LuceneSentenceSearch {
         if (lang !in indices) {
             indices[lang] = LuceneSentenceSearch.createNamedIndex(indexName, lang)
+            indices[lang]!!.setBleu_similarity_threshold(blueRescoringThreshold)
             indices[lang]!!.addSentenceToIndex("", "", "")
         }
         return indices[lang]!!
