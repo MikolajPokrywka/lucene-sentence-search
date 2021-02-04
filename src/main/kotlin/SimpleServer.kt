@@ -17,7 +17,7 @@ class Args(parser: ArgParser) {
         .storing(
             "--blue-rescoring-threshold",
             help = "Blue rescoring threshold"
-        ) { toFloat() }.default(0.15f)
+        ) { toFloat() }.default(0.05f)
 }
 
 
@@ -64,7 +64,7 @@ fun main(args: Array<String>) {
 
                 post("/delete") {
                     try {
-                        val request = call.receive<TMDelete.Request>()
+                        val request = call.receive<Meta>()
                         val response = requestProcessor.processDelete(request)
                         call.respond(response)
                     } catch (e: Exception) {

@@ -70,8 +70,7 @@ public class AnalyzerContainer {
             case "nl":
                 return new DutchAnalyzer();
             default:
-                System.out.println(String.format("Invalid language %s, fallback to en", lang));
-                return new EnglishAnalyzer();
+                throw new RuntimeException("Invalid analyzer option: " + lang);
         }
     }
 

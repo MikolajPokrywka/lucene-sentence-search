@@ -3,10 +3,11 @@ import com.LuceneSentenceSearch
 enum class Status {
     OK, FAILED
 }
+data class Meta(val uid: String, val language: String)
+
 
 class TMDelete {
     data class Response(val status: Status, val errorMessage: String?)
-    data class Request(val uid: String, val language: String)
 }
 
 class TMQuery {
@@ -17,11 +18,11 @@ class TMQuery {
         val errorMessage: String?
     )
 
-    data class Request(val uid: String, val language: String, val text: String)
+    data class Request(val input: String, val meta: Meta)
 }
 
 class TMSave {
-    data class Request(val uid: String, val language: String, val source: String, val target: String)
+    data class Request(val source: String, val target: String, val meta: Meta)
     data class Response(val status: Status, val errorMessage: String?)
 }
 
@@ -31,8 +32,8 @@ class RequestProcessor(private val indexName: String, private val blueRescoringT
 
     fun processRetrieve(request: TMQuery.Request): TMQuery.Response {
         // Query index
-        val index = getIndex(request.language)
-        val documents = index.queryTM(request.text, request.uid, false, 50)
+        val index = getIndex(request.meta.language)
+        val documents = index.queryTM(request.input, request.meta.uid, false, 50)
 
         val sourceContext = documents.map { it.getField("srcBPE").stringValue() }
         val targetContext = documents.map { it.getField("trgBPE").stringValue() }
@@ -41,15 +42,15 @@ class RequestProcessor(private val indexName: String, private val blueRescoringT
     }
 
     fun processSave(request: TMSave.Request): TMSave.Response {
-        val index = getIndex(request.language)
-        index.addSentenceToIndex(request.source, request.target, request.uid)
+        val index = getIndex(request.meta.language)
+        index.addSentenceToIndex(request.source, request.target, request.meta.uid)
         return TMSave.Response(Status.OK, null)
     }
 
-    fun processDelete(request: TMDelete.Request): TMDelete.Response {
+    fun processDelete(request: Meta): TMDelete.Response {
         val index = getIndex(request.language)
         index.deleteSentenceFromIndexByUID(request.uid)
-        return TMDelete.Response(Status.FAILED, null)
+        return TMDelete.Response(Status.OK, null)
     }
 
     private fun getIndex(lang: String): LuceneSentenceSearch {
