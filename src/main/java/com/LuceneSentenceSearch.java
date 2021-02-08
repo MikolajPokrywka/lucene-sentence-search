@@ -39,7 +39,7 @@ public class LuceneSentenceSearch {
 
     private static final Logger LOGGER = Logger.getLogger("Lucene translation memory.");
 
-    private LuceneSentenceSearch(Directory fsDirectory, String language) {
+    private LuceneSentenceSearch(Directory fsDirectory, String language) throws Exception {
         super();
         this.indexDirectory = fsDirectory;
         this.analyzer = AnalyzerContainer.getAnalyzer(language);

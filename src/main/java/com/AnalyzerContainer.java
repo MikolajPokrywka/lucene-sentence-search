@@ -25,7 +25,7 @@ import org.apache.lucene.analysis.nl.DutchAnalyzer;
 
 
 public class AnalyzerContainer {
-    public static Analyzer getAnalyzer(String lang) {
+    public static Analyzer getAnalyzer(String lang) throws Exception {
         switch (lang) {
             case "en":
                 return new EnglishAnalyzer();
@@ -70,7 +70,7 @@ public class AnalyzerContainer {
             case "nl":
                 return new DutchAnalyzer();
             default:
-                throw new RuntimeException("Invalid analyzer option: " + lang);
+                throw new Exception("Invalid analyzer option: " + lang);
         }
     }
 
