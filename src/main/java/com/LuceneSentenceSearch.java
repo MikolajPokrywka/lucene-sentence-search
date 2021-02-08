@@ -61,18 +61,30 @@ public class LuceneSentenceSearch {
         return createIndex("en");
     }
 
-    public static LuceneSentenceSearch createIndex(String laguage) {
+    public static LuceneSentenceSearch createIndex(String language) {
         String indexName = RandomStringUtils.randomAlphabetic(10);
-        return createNamedIndex(indexName, laguage);
+        return createIndex(indexName, language);
     }
 
-    public static LuceneSentenceSearch createNamedIndex(String indexName, String laguage) {
+    public static LuceneSentenceSearch createIndex(String indexName, String language) {
         String indexDir = "index//" + indexName;
         LuceneSentenceSearch indexer = null;
         try {
             Path indexPath = Paths.get(indexDir);
             MMapDirectory fsDirectory = new MMapDirectory(indexPath);
-            indexer = new LuceneSentenceSearch(fsDirectory, laguage);
+            indexer = new LuceneSentenceSearch(fsDirectory, language);
+        } catch (Exception ex) {
+            System.out.println("Cannot create index..." + ex.getMessage());
+            System.exit(-1);
+        }
+        return indexer;
+    }
+
+    public static LuceneSentenceSearch createIndexInDir(String directory, String language) {
+        LuceneSentenceSearch indexer = null;
+        try {
+            MMapDirectory fsDirectory = new MMapDirectory(Paths.get(directory));
+            indexer = new LuceneSentenceSearch(fsDirectory, language);
         } catch (Exception ex) {
             System.out.println("Cannot create index..." + ex.getMessage());
             System.exit(-1);

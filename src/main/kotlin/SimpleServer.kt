@@ -10,21 +10,28 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import java.io.File
+import java.lang.IllegalArgumentException
+import java.nio.file.Paths
 
 class Args(parser: ArgParser) {
     val port by parser.storing("Port number") { toInt() }
+
     val bleuRescoringThreshold: Float by parser
         .storing(
             "--bleu-rescoring-threshold",
             help = "Blue rescoring threshold"
         ) { toFloat() }.default(0.05f)
-}
 
+    val indexDir by parser
+        .storing("--index-dir", help = "Index store location") { File(this).also { it.mkdirs() } }
+        .default(File("tm-index/").also { it.mkdirs() })
+        .addValidator { if (!value.isDirectory) throw IllegalArgumentException("index-dir must be a directory") }
+}
 
 fun main(args: Array<String>) {
     ArgParser(args).parseInto(::Args).run {
-
-        val requestProcessor = RequestProcessor("TM_index", bleuRescoringThreshold)
+        val requestProcessor = RequestProcessor(indexDir.toString(), bleuRescoringThreshold)
 
         embeddedServer(Netty, port) {
 
