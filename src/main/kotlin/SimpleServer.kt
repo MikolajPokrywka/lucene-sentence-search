@@ -15,7 +15,7 @@ class Args(parser: ArgParser) {
     val port by parser.storing("Port number") { toInt() }
     val bleuRescoringThreshold: Float by parser
         .storing(
-            "--blue-rescoring-threshold",
+            "--bleu-rescoring-threshold",
             help = "Blue rescoring threshold"
         ) { toFloat() }.default(0.05f)
 }

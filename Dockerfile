@@ -8,4 +8,5 @@ RUN ./gradlew installDist
 FROM openjdk:8u171-jre-slim
 COPY --from=builder build/install/tm /tm
 
-CMD ["tm/bin/tm", "--port", "80"]
+EXPOSE 80
+ENTRYPOINT ["tm/bin/tm", "--port", "80"]
