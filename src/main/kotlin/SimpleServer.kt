@@ -71,7 +71,7 @@ fun main(args: Array<String>) {
 
                 post("/delete") {
                     try {
-                        val request = call.receive<Meta>()
+                        val request = call.receive<UID>()
                         val response = requestProcessor.processDelete(request)
                         call.respond(response)
                     } catch (e: Exception) {

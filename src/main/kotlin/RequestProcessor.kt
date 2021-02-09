@@ -4,7 +4,7 @@ enum class Status {
     OK, FAILED
 }
 data class Meta(val uid: String, val language: String)
-
+data class UID(val uid: String)
 
 class TMDelete {
     data class Response(val status: Status, val errorMessage: String?)
@@ -47,8 +47,8 @@ class RequestProcessor(private val indexDir: String, private val blueRescoringTh
         return TMSave.Response(Status.OK, null)
     }
 
-    fun processDelete(request: Meta): TMDelete.Response {
-        val index = getIndex(request.language)
+    fun processDelete(request: UID): TMDelete.Response {
+        val index = getIndex("en")
         index.deleteSentenceFromIndexByUID(request.uid)
         return TMDelete.Response(Status.OK, null)
     }
