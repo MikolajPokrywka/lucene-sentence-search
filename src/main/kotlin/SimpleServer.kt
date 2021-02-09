@@ -48,7 +48,7 @@ fun main(args: Array<String>) {
             }
 
             routing {
-                post("/retrieve") {
+                post("/get") {
                     try {
                         val request = call.receive<TMQuery.Request>()
                         val response = requestProcessor.processRetrieve(request)

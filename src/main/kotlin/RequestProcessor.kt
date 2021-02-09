@@ -3,7 +3,7 @@ import com.LuceneSentenceSearch
 enum class Status {
     OK, FAILED
 }
-data class Meta(val uid: String, val language: String)
+data class Meta(val uid: String, val srclang: String)
 data class UID(val uid: String)
 
 class TMDelete {
@@ -32,7 +32,7 @@ class RequestProcessor(private val indexDir: String, private val blueRescoringTh
 
     fun processRetrieve(request: TMQuery.Request): TMQuery.Response {
         // Query index
-        val index = getIndex(request.meta.language)
+        val index = getIndex(request.meta.srclang)
         val documents = index.queryTM(request.input, request.meta.uid, false, 50)
 
         val sourceContext = documents.map { it.getField("srcBPE").stringValue() }
@@ -42,7 +42,7 @@ class RequestProcessor(private val indexDir: String, private val blueRescoringTh
     }
 
     fun processSave(request: TMSave.Request): TMSave.Response {
-        val index = getIndex(request.meta.language)
+        val index = getIndex(request.meta.srclang)
         index.addSentenceToIndex(request.source, request.target, request.meta.uid)
         return TMSave.Response(Status.OK, null)
     }
