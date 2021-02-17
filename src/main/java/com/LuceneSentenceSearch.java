@@ -147,7 +147,7 @@ public class LuceneSentenceSearch {
                     UID = line.split("\t")[1];
                     try {
                         indexer.deleteSentenceFromIndexByUID(UID);
-                    } catch (IOException e) {
+                    } catch (IOException | ParseException e) {
                         LOGGER.log(Level.SEVERE, "Exception while handling DELETE for UID: " + UID);
                         LOGGER.log(Level.SEVERE, "Exception", e);
                         e.printStackTrace(System.out);
@@ -208,12 +208,12 @@ public class LuceneSentenceSearch {
         indexWriter.close();
     }
 
-    public void deleteSentenceFromIndexByUID(String UID) throws IOException {
+    public void deleteSentenceFromIndexByUID(String UID) throws IOException, ParseException {
         IndexWriterConfig indexWriterConfig = new IndexWriterConfig(analyzer);
         indexWriterConfig.setCodec(new Lucene84Codec());
         IndexWriter indexWriter = new IndexWriter(indexDirectory, indexWriterConfig);
-        Query UIDQuery = new TermQuery(new Term("UID", UID));
-        indexWriter.deleteDocuments(UIDQuery);
+        Query uQuery = new QueryParser("UID", analyzer).parse(UID);
+        indexWriter.deleteDocuments(uQuery);
         indexWriter.commit();
         indexWriter.close();
     }
