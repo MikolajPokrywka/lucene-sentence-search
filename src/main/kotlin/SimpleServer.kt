@@ -34,7 +34,9 @@ fun main(args: Array<String>) {
         val requestProcessor = RequestProcessor(indexDir.toString(), bleuRescoringThreshold)
 
         embeddedServer(Netty, port, configure = {
-            workerGroupSize = 1
+            connectionGroupSize = 2
+            workerGroupSize = 5
+            callGroupSize = 1
         }) {
 
 
