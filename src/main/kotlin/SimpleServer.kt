@@ -33,7 +33,10 @@ fun main(args: Array<String>) {
     ArgParser(args).parseInto(::Args).run {
         val requestProcessor = RequestProcessor(indexDir.toString(), bleuRescoringThreshold)
 
-        embeddedServer(Netty, port) {
+        embeddedServer(Netty, port, configure = {
+            workerGroupSize = 1
+        }) {
+
 
             install(StatusPages) {
                 exception<Throwable> { e ->
