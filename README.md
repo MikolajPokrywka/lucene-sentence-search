@@ -1,6 +1,5 @@
 # Introduction 
-
-# Getting Started
+This project implements Lucene \[1] based translation memory with BLEU rescoring as described in _Multi-Domain Neural Machine Translation through Unsupervised Adaptation_ \[2]
 ## Requirements
 Java JDK installation is required. Project is tested with JDK 8.
 
@@ -31,7 +30,6 @@ from com import LuceneSentenceSearch
 
 
 ## API Call examples
-### Save (Source,Target) pair in TM
 ```
 curl \
 --header "Content-Type: application/json" \
@@ -45,7 +43,7 @@ Response:
   "status": "OK"
 }
 ```
-### Retrieve (Source,Target) pair by context 
+
 ```
 curl \
 --header "Content-Type: application/json" \
@@ -62,7 +60,7 @@ Response:
 }
 
 ```
-### Delete all saved pairs for this user
+
 ```
 curl \
 --header "Content-Type: application/json" \
@@ -83,6 +81,6 @@ Response:
  - `queryTM(String query_sentence, String domain, boolean skipBleuRescorer, int numberOfCandidates)` - will retrieve at most `numberOfCandidates` sentences from TM that are similar with respect to stemmed query TFIDF; if `skipBleuRescorer is `True` then will also use BLEU rescoring to refine results further
 
 ## References
-[1] Farajian, M. Amin, et al. "Multi-domain neural machine translation through unsupervised adaptation." Proceedings of the Second Conference on Machine Translation. 2017.
+[1] McCandless, Michael, et al. Lucene in action. Vol. 2. Greenwich: Manning, 2010.
 
-[2] McCandless, Michael, et al. Lucene in action. Vol. 2. Greenwich: Manning, 2010.
+[2] Farajian, M. Amin, et al. "Multi-domain neural machine translation through unsupervised adaptation." Proceedings of the Second Conference on Machine Translation. 2017.
