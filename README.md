@@ -83,4 +83,5 @@ Response:
 
 ## References
 [1] Farajian, M. Amin, et al. "Multi-domain neural machine translation through unsupervised adaptation." Proceedings of the Second Conference on Machine Translation. 2017.
+
 [2] McCandless, Michael, et al. Lucene in action. Vol. 2. Greenwich: Manning, 2010.
