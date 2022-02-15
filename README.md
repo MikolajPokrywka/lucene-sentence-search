@@ -1,5 +1,4 @@
 # Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
 
 # Getting Started
 ## Requirements
@@ -75,9 +74,13 @@ Response:
   "errorMessage": null,
   "status": "OK"
 }
-```
+
 
 ## Useful Functions
  - `createIndexInDir("/tmp", "lv")` - will initialize a Latvian source language translation memory stored in `/tmp`
   - `addFileToIndex(srcFile, trgFile, "IT")` - will load content of two parallel files in translation memory for domain `IT`
  - `queryTM(String query_sentence, String domain, boolean skipBleuRescorer, int numberOfCandidates)` - will retrieve at most `numberOfCandidates` sentences from TM that are similar with respect to stemmed query TFIDF; if `skipBleuRescorer is `True` then will also use BLEU rescoring to refine results further
+
+## References
+[1] Farajian, M. Amin, et al. "Multi-domain neural machine translation through unsupervised adaptation." Proceedings of the Second Conference on Machine Translation. 2017.
+[2] McCandless, Michael, et al. Lucene in action. Vol. 2. Greenwich: Manning, 2010.
