@@ -74,7 +74,7 @@ Response:
   "errorMessage": null,
   "status": "OK"
 }
-
+```
 
 ## Useful Functions
  - `createIndexInDir("/tmp", "lv")` - will initialize a Latvian source language translation memory stored in `/tmp`
