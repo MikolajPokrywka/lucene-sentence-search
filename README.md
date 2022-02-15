@@ -31,6 +31,7 @@ from com import LuceneSentenceSearch
 
 
 ## API Call examples
+### Save (Source,Target) pair in TM
 ```
 curl \
 --header "Content-Type: application/json" \
@@ -44,7 +45,7 @@ Response:
   "status": "OK"
 }
 ```
-
+### Retrieve (Source,Target) pair by context 
 ```
 curl \
 --header "Content-Type: application/json" \
@@ -61,7 +62,7 @@ Response:
 }
 
 ```
-
+### Delete all saved pairs for this user
 ```
 curl \
 --header "Content-Type: application/json" \
