@@ -22,7 +22,7 @@ import org.apache.lucene.analysis.fi.FinnishAnalyzer;
 import org.apache.lucene.analysis.no.NorwegianAnalyzer;
 import org.apache.lucene.analysis.sv.SwedishAnalyzer;
 import org.apache.lucene.analysis.nl.DutchAnalyzer;
-import org.apache.lucene.analysis.uk.UkrainianMorfologikAnalyzer
+import org.apache.lucene.analysis.uk.UkrainianMorfologikAnalyzer;
 
 public class AnalyzerContainer {
     public static Analyzer getAnalyzer(String lang) throws Exception {
